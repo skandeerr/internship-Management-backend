@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace interships_Management.Controllers;
 [ApiController]
 [Route("[controller]")]
-[Authorize(Roles ="Admin")]
+
 
 public class EntretienController : ControllerBase {
     private readonly ContextDb _contextDb ;
@@ -75,4 +75,55 @@ public class EntretienController : ControllerBase {
                 return Ok();
             }
         }
+      [HttpPut]
+        [Route("validate/{id:Guid}")]
+        public async Task<IActionResult> Put(Guid id){
+          var  entretien = await _contextDb.Entretiens.FindAsync(id);
+            if(entretien == null){
+                return BadRequest("id n'existe pas");
+            }else{
+                entretien.validate= 1;
+               
+                
+                await _contextDb.SaveChangesAsync();
+
+                return Ok(entretien);
+            }
+       
+}
+        [HttpPut]
+        [Route("accept/{id:Guid}")]
+        public async Task<IActionResult> AcceptInter(Guid id){
+          var  entretien = await _contextDb.Entretiens.FindAsync(id);
+            if(entretien == null){
+                return BadRequest("id n'existe pas");
+            }else{
+                entretien.accept= "oui";
+               
+                
+                await _contextDb.SaveChangesAsync();
+
+                return Ok(entretien);
+            }
+
+        }
+
+        [HttpPut]
+        [Route("refuse/{id:Guid}")]
+        public async Task<IActionResult> RefuseInter(Guid id){
+          var  entretien = await _contextDb.Entretiens.FindAsync(id);
+            if(entretien == null){
+                return BadRequest("id n'existe pas");
+            }else{
+                entretien.accept= "non";
+               
+                
+                await _contextDb.SaveChangesAsync();
+
+                return Ok(entretien);
+            }
+
+        }
+
+
 }

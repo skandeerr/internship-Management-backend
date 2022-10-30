@@ -21,7 +21,7 @@ public PostProjController(ContextDb contextDb)
  
     }
 
-    [Authorize(Roles ="User")]
+    
     [HttpGet]
     [Route("{id:Guid}")]
     public async Task<IActionResult> GetById(Guid Id){
@@ -31,7 +31,7 @@ public PostProjController(ContextDb contextDb)
         }
         return Ok(postproj);
     }
-    [Authorize(Roles ="User")]
+   
     [HttpPost]
         public async Task<IActionResult> Post([FromBody] PostProject postproj){
             postproj.id = Guid.NewGuid();
@@ -46,7 +46,7 @@ public PostProjController(ContextDb contextDb)
 
 
         [HttpPut]
-        [Authorize(Roles ="User")]
+       
         [Route("{id:Guid}")]
         public async Task<IActionResult> Put(Guid id,PostProject postproj){
           var  postprojs = await _contextDb.PostProjects.FindAsync(id);
@@ -63,7 +63,7 @@ public PostProjController(ContextDb contextDb)
             }
         }
          [HttpDelete]
-         [Authorize(Roles ="User")]
+         
         [Route("{id:Guid}")]
 
         public async Task<IActionResult> Delete(Guid id ){

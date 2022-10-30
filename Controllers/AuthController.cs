@@ -61,10 +61,26 @@ public async Task<IActionResult> GetAllUsers(){
 [HttpGet]
 [Route("{id:Guid}")]
 
-public async Task<IActionResult> GetAdminById([FromRoute]Guid id){
+public async Task<IActionResult> GetUserById([FromRoute]Guid id){
     var users =  await _userManager.FindByIdAsync(id.ToString());
 
     
+    return Ok(users);
+}
+[HttpPut]
+[Route("{id:Guid}")]
+public async Task<IActionResult> ReglageProfilUser([FromRoute]Guid id, ReglageUser model){
+     var users =  await _userManager.FindByIdAsync(id.ToString());
+    users.FullName = model.FullName;
+    users.Email = model.Email;
+    users.Ecole = model.Ecole;
+    users.Niveau_Specialite = model.Niveau_Specialite;
+    users.lienGithub=model.lienGithub;
+    users.lienLinkedln= model.lienLinkedln;
+    users.PhoneNumber = model.PhoneNumber;
+    users.UserName= model.Email;
+
+    await _userManager.UpdateAsync(users);
     return Ok(users);
 }
 

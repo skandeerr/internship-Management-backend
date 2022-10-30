@@ -24,7 +24,7 @@ public AdminController(IAuthAdminService IauthService,UserManager<ApplicationUse
 
 
 [HttpPost("registre")]
-[Authorize(Roles ="Super Admin")]
+
 public async Task<IActionResult> RegistreUser(RegistreAdmin model){
     if(!ModelState.IsValid){
         return BadRequest(ModelState);
@@ -82,30 +82,26 @@ public async Task<IActionResult> ValidateUser([FromRoute]Guid id){
     await _userManager.UpdateAsync(user);
     return Ok(user);
 }
-[HttpPut]
-[Route("edit/profil/{id:Guid}")]
-public async Task<IActionResult> EditProfil([FromRoute]Guid id, RegistreAdmin profil){
-    var admin = await _userManager.FindByIdAsync(id.ToString());
-    admin.FullName = profil.FullName;
-    admin.Email= profil.Email;
-    admin.PhoneNumber= profil.tel;
-    
-    var result = await _userManager.ChangePasswordAsync(admin,admin.PasswordHash.GetHashCode().ToString(),profil.Password?.GetHashCode().ToString());
-    if(!result.Succeeded){
-            var errors = string.Empty;
-            foreach(var error in result.Errors){
-                errors += $"{error.Description},";
-            }
-            return BadRequest(errors);
-        }
-    await _userManager.UpdateAsync(admin);
-    return Ok(admin);
-}
+
 [HttpDelete]
-[Route("edit/profil/{id:Guid}")]
+[Route("delete/profil/{id:Guid}")]
 public async Task<IActionResult> DeleteAdmin([FromRoute]Guid id){
     var admin = await _userManager.FindByIdAsync(id.ToString());
     await _userManager.DeleteAsync(admin);
     return Ok();
+}
+
+[HttpPut]
+[Route("edit/profil/{id:Guid}")]
+public async Task<IActionResult> ReglageProfilAdmin([FromRoute]Guid id, ReglageAdmin model){
+     var admin =  await _userManager.FindByIdAsync(id.ToString());
+    admin.FullName = model.FullName;
+    admin.Email = model.Email;
+   
+    admin.PhoneNumber = model.PhoneNumber;
+    admin.UserName= model.Email;
+
+    await _userManager.UpdateAsync(admin);
+    return Ok(admin);
 }
 }
